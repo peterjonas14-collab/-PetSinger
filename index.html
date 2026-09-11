@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b12">
+<title>PetSinger</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b0b12;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:28px 20px 40px;background:radial-gradient(circle at 50% 0,#30204f 0,#0b0b12 42%)}
+.logo{font-weight:900;font-size:30px;letter-spacing:-1px}.sub{color:#aaa;margin-top:4px}
+.card{margin-top:22px;padding:18px;border:1px solid #302d3c;border-radius:24px;background:#15141d}
+h1{font-size:34px;line-height:1.02;margin:10px 0}.label{font-size:13px;color:#aaa;margin:18px 0 7px}
+input,select,textarea{width:100%;background:#0e0d14;border:1px solid #383441;color:#fff;border-radius:14px;padding:13px;font-size:16px}
+button{width:100%;border:0;border-radius:16px;padding:15px;font-size:17px;font-weight:800;margin-top:14px;background:linear-gradient(90deg,#9b5cff,#ff4fcf);color:#fff}
+button.secondary{background:#24212e}.hidden{display:none}.preview{width:100%;border-radius:20px;display:block;max-height:430px;object-fit:cover}.pill{display:inline-block;padding:7px 10px;border-radius:20px;background:#282332;color:#ddd;font-size:12px;margin:4px 4px 0 0}
+.status{padding:14px;border-radius:14px;background:#0f0e15;color:#bbb;margin-top:14px;line-height:1.4}
+.small{font-size:12px;color:#777;margin-top:16px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="logo">🐾 PetSinger</div>
+  <div class="sub">Turn your pet into a music star.</div>
+
+  <section id="home" class="card">
+    <h1>Your pet.<br>Your song.</h1>
+    <p class="sub">Create an original AI song and turn your pet photo into a music video.</p>
+    <span class="pill">Original songs</span><span class="pill">AI vocals</span><span class="pill">9:16 video</span>
+    <button onclick="show('create')">Create my PetSinger</button>
+  </section>
+
+  <section id="create" class="card hidden">
+    <h2>1. Choose your pet</h2>
+    <input id="photo" type="file" accept="image/*" onchange="preview(event)">
+    <img id="img" class="preview hidden">
+    <div class="label">Song topic</div>
+    <textarea id="prompt" rows="3">I'm the Boss of the House</textarea>
+    <div class="label">Music</div>
+    <select id="style"><option>Funny upbeat pop</option><option>Pop</option><option>Rock</option><option>Rap</option><option>Country</option><option>EDM</option><option>Emotional</option></select>
+    <div class="label">Voice</div>
+    <select id="voice"><option>Cute funny vocal</option><option>Deep</option><option>Cartoon</option><option>Pop</option><option>Dramatic</option></select>
+    <div class="label">Duration</div>
+    <select id="duration"><option value="15">15 seconds</option><option value="30">30 seconds</option></select>
+    <button onclick="startDemo()">Create song & video</button>
+    <button class="secondary" onclick="show('home')">Back</button>
+    <div class="small">Your API keys must never be placed in this webpage. They belong on the secure backend.</div>
+  </section>
+
+  <section id="progress" class="card hidden">
+    <h2>Creating your music star… 🎤</h2>
+    <div class="status" id="status">Preparing your pet…</div>
+  </section>
+
+  <section id="result" class="card hidden">
+    <h2>Your PetSinger video 🎬</h2>
+    <div class="status">Demo interface ready. Connect the deployed backend to generate the real AI song and animation.</div>
+    <button onclick="show('create')">Make another</button>
+  </section>
+</div>
+<script>
+function show(id){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+function preview(e){const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f);const i=document.getElementById('img');i.src=u;i.classList.remove('hidden')}
+function startDemo(){
+ if(!document.getElementById('photo').files[0]){alert('Please choose your pet photo first.');return}
+ show('progress');
+ const messages=['Preparing your pet photo…','Writing original lyrics…','Creating the song and vocals…','Animating your pet…','Rendering 9:16 video…'];
+ let n=0; const s=document.getElementById('status');s.textContent=messages[n];
+ const t=setInterval(()=>{n++;if(n<messages.length)s.textContent=messages[n];else{clearInterval(t);show('result')}},1100);
+}
+</script>
+</body>
+</html>
